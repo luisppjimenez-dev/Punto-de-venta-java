@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args){
-        System.out.println("Implementacion de main");
-
+        VentanaPrincipal puntoDeVenta = new VentanaPrincipal();
     }
-
 }
+
+
