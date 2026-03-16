@@ -37,7 +37,22 @@ public class VentanaPrincipal extends JFrame {
         panelBotones.setBorder(new EmptyBorder(30, 50, 30, 50));
         panelBotones.setBackground(Color.ORANGE);
 
+        JButton puntoVenta = new JButton("Punto de venta");
+        JButton inventario = new JButton("Inventario");
+        JButton historial = new JButton("<html><center>Historial<br>de ventas</center></html>");
 
+        puntoVenta.setFont(new Font("Open Sans", Font.BOLD, 18));
+        inventario.setFont(new Font("Open Sans", Font.BOLD, 18));
+        historial.setFont(new Font("Open Sans", Font.BOLD, 18));
+        panelBotones.add(puntoVenta);
+        panelBotones.add(inventario);
+        panelBotones.add(historial);
+        puntoVenta.setBackground(new Color(255, 51, 51));
+        inventario.setBackground(new Color(255, 51, 51));
+        historial.setBackground(new Color(255, 51, 51));
+        puntoVenta.setForeground(Color.WHITE);
+        inventario.setForeground(Color.WHITE);
+        historial.setForeground(Color.WHITE);
 
         JLabel centro = new JLabel("Centro", JLabel.CENTER);
         centro.setOpaque(true);
