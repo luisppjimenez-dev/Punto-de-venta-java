@@ -3,5 +3,3 @@ public class Main {
         VentanaPrincipal puntoDeVenta = new VentanaPrincipal();
     }
 }
-
-
