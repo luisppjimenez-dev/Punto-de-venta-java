@@ -72,10 +72,49 @@ public class VentanaPrincipal extends JFrame {
         panelBotonLogo.add(panelBotones, BorderLayout.CENTER);
         add(sur, BorderLayout.SOUTH);
 
+
+
+
+        // Acciones botones =============
+
+        botonLogo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                new VentanaPrincipal().setVisible(true);
+                setVisible(false);
+            }
+        });
+/*
+
+        puntoVenta.addActionListener(e -> {
+            new VentanaPuntoDeVenta().setVisible(true);
+            setVisible(false);
+        });
+
+
+        inventario.addActionListener(e -> {
+            new VentanaInventario().setVisible(true);
+            setVisible(false);
+        });
+
+
+        historial.addActionListener(e -> {
+            new VentanaHistorial().setVisible(true);
+            setVisible(false);
+        });
+*/
         setVisible(true);
 
-        setVisible(true);
     }
 }
 
 
+//BorderLayout	divide la ventana en 5 zonas
+//FlowLayout	coloca componentes en fila
+//GridLayout	crea una tabla
+//BoxLayout	acomoda en columna o fila
+
+//WEST sur
+//CENTER
+//NORTH
+//EAST Este
+//WEST Oeste
