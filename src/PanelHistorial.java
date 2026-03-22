@@ -40,11 +40,11 @@ public class PanelHistorial extends JPanel{
 
 
         // ===== TABLA (CENTER) =====
-        String[] columnas = {"Fecha", "Hora"};
+        String[] columnas = {"Fecha", "Hora","Total"};
         Object[][] datos = {
-                {"01/04/2026", "10:30"},
-                {"02/04/2026", "12:15"},
-                {"03/04/2026", "15:45"}
+                {"01/04/2026", "10:30", "150"},
+                {"02/04/2026", "12:00", "200"},
+                {"02/04/2026", "13:00", "300"}
         };
 
         JTable tabla = new JTable(datos, columnas);
@@ -71,22 +71,23 @@ public class PanelHistorial extends JPanel{
 
         add(bottom, BorderLayout.SOUTH);
 
-
-
         ver.addActionListener(e -> {
 
             int fila = tabla.getSelectedRow();
 
             if (fila != -1) {
-                String nombre = tabla.getValueAt(fila, 0).toString();
-                String precio = tabla.getValueAt(fila, 1).toString();
-                String stock = tabla.getValueAt(fila, 2).toString();
+                String fecha = tabla.getValueAt(fila, 0).toString();
+                String hora = tabla.getValueAt(fila, 1).toString();
+                String total = tabla.getValueAt(fila, 2).toString();
 
-                new VentanaVer(nombre, "123", precio, stock).setVisible(true);
+                // 👇 AQUÍ ABRES LA VENTANA CON DATOS CORRECTOS
+                new VentanaVer(fecha, hora, total, "").setVisible(true);
+
             } else {
-                JOptionPane.showMessageDialog(null, "Selecciona un producto");
+                JOptionPane.showMessageDialog(this, "Selecciona una venta");
             }
         });
+
 
     }
 
