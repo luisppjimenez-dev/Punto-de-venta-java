@@ -83,10 +83,11 @@ public class VentanaAgregarNuevo extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(sur, BorderLayout.SOUTH);
         setVisible(true);
+
+
     }
 
-    public static void main(String[] args) {
-        VentanaAgregarNuevo uno = new VentanaAgregarNuevo();
-    }
+
+
 }
 

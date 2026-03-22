@@ -74,8 +74,18 @@ public class PanelHistorial extends JPanel{
 
 
         ver.addActionListener(e -> {
-            VentanaVer newfreame = new VentanaVer();
-            newfreame.setVisible(true);
+
+            int fila = tabla.getSelectedRow();
+
+            if (fila != -1) {
+                String nombre = tabla.getValueAt(fila, 0).toString();
+                String precio = tabla.getValueAt(fila, 1).toString();
+                String stock = tabla.getValueAt(fila, 2).toString();
+
+                new VentanaVer(nombre, "123", precio, stock).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecciona un producto");
+            }
         });
 
     }
