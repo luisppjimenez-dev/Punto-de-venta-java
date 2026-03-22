@@ -5,20 +5,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
+ * recibir la ventana principal:
  * Clase que crea los botones principales del sistema
- * y sirve para las ventanas:
+ * y sirve para las ventanas: Principal, Invetario , Historial
+ *
  *  * @author Luis
  *  * @version 1.0
  */
 
 public class PanelBotones extends JPanel{
-    public PanelBotones() {
+    private VentanaPrincipal ventana;
+
+    public PanelBotones(VentanaPrincipal ventana) {
+
+        this.ventana = ventana;
 
         setLayout(new BorderLayout());
 
         JPanel panelBotonLogo = new JPanel(new BorderLayout());
         panelBotonLogo.setBackground(Color.WHITE);
-        // 1. Cargar las imágenes una sola vez (como atributos o variables locales antes del listener)
         ImageIcon logoG = new ImageIcon("src/donroyG.png");
         ImageIcon logo = new ImageIcon("src/donroy.png");
         JLabel botonLogo = new JLabel(logo);
@@ -53,40 +58,23 @@ public class PanelBotones extends JPanel{
         panelBotonLogo.add(panelBotones, BorderLayout.CENTER);
 
 
-        // Acciones botones =============
-
+        // ACCIONES
         puntoVenta.addActionListener(e -> {
-            Window ventana = SwingUtilities.getWindowAncestor(this);
-            ventana.dispose();
-            new VentanaPuntoDeVenta().setVisible(true);
+            ventana.mostrarPanel(new PanelPuntoDeVenta());
         });
 
         inventario.addActionListener(e -> {
-            Window ventana = SwingUtilities.getWindowAncestor(this);
-            ventana.dispose();
-            new VentanaInventario().setVisible(true);
+            ventana.mostrarPanel(new PanelInventario());
         });
-
 
         historial.addActionListener(e -> {
-            Window ventana = SwingUtilities.getWindowAncestor(this);
-            ventana.dispose();
-            new VentanaHistorial().setVisible(true);
+            ventana.mostrarPanel(new PanelHistorial());
         });
 
-        // Acciones botones solo apariencia=============
-
-
-
-
-        // 2. Usarlas en el MouseAdapter
         botonLogo.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
-                Window ventana = SwingUtilities.getWindowAncestor(PanelBotones.this);
-                ventana.dispose();
-                new VentanaPrincipal().setVisible(true);
+                ventana.mostrarPanel(new PanelInicio());
             }
 
             @Override
@@ -98,13 +86,12 @@ public class PanelBotones extends JPanel{
             public void mouseExited(MouseEvent e) {
                 botonLogo.setIcon(logo);
             }
-
         });
 
         puntoVenta.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                puntoVenta.setBackground(new Color(239, 75, 75));// Color más claro al pasar el ratón
+                puntoVenta.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
             }
 
             @Override
@@ -116,7 +103,7 @@ public class PanelBotones extends JPanel{
         inventario.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                inventario.setBackground(new Color(239, 75, 75));// Color más claro al pasar el ratón
+                inventario.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
             }
 
             @Override
@@ -128,7 +115,7 @@ public class PanelBotones extends JPanel{
         historial.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                historial.setBackground(new Color(239, 75, 75));// Color más claro al pasar el ratón
+                historial.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
             }
 
             @Override
