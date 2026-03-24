@@ -8,7 +8,7 @@ public class VentanaModificarStock extends JFrame{
 
     public VentanaModificarStock() {
         setTitle("Modificar Stock");
-        setSize(700, 500);
+        setSize(500, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(Color.WHITE);
