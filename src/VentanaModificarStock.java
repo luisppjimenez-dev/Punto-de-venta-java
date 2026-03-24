@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class VentanaModificarStock extends JFrame{
     private int stockNuevo;
@@ -91,18 +89,35 @@ public class VentanaModificarStock extends JFrame{
         JButton btnMenos = new JButton("-");
         JButton btnMas   = new JButton("+");
         labelStockNumero = new JLabel("0", JLabel.CENTER);
+        labelStockNumero.setPreferredSize(new Dimension(50, 30));
+        // ===== ACCIONES =====
+        btnMas.addActionListener(e -> {
+            stockNuevo++;
+            labelStockNumero.setText(String.valueOf(stockNuevo));
+        });
+
+        btnMenos.addActionListener(e -> {
+            if (stockNuevo > 0) { // evita números negativos
+                stockNuevo--;
+                labelStockNumero.setText(String.valueOf(stockNuevo));
+            }
+        });
 
         JPanel panelContador = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        panelContador.setBackground(Color.WHITE);
+        panelContador.setBackground(Color.white);
         panelContador.add(btnMas);
         panelContador.add(labelStockNumero);
         panelContador.add(btnMenos);
-
-
-
-
-
+        add(sur, BorderLayout.SOUTH);
+        setVisible(true);
+        sur.add(panelContador);
+        sur.add(guardar);
+        sur.add(cancelar);
     }
-    public void setVisible(boolean b) {
+    public static void main(String[] args) {
+        VentanaModificarStock v = new VentanaModificarStock();
+        v.setVisible(true);
     }
 }
+
+
