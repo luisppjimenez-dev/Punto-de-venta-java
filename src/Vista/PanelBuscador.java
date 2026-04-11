@@ -2,6 +2,11 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+/**
+ * Panel para la visualizacion del buscador en los paneles pricipales
+ *  * @author Luis
+ *  * @version 1.0
+ */
 
 public class PanelBuscador extends JPanel {
     private JButton btnBuscar;

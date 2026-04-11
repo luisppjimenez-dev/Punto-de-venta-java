@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
+/**
+ * Interfaz para evitar acoplamiento en los botones pricipales
+ *  * @author Erick
+ *  * @version 1.0
+ */
 public interface InterfazBtnPrincipales {
     /**
      *Cambia el panel inferior a punto de venta

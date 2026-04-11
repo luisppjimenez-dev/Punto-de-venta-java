@@ -7,214 +7,236 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.RowFilter;
 
+/**
+ * Panel pricipal del boton Inventario
+ *  * @author Erick
+ *  * @version 1.0
+ */
 
 public class PanelInventario extends JPanel implements InterfazInventario {
+
+    // Creamos Botones como atributos
     private JButton agregarNuevo;
     private JButton modificar;
     private JButton imprimir;
     private JButton eliminar;
-    private TableRowSorter<DefaultTableModel> sorter;
-    private JTable tabla;
-    private DefaultTableModel modelo;
+
     private PanelBuscador panelBuscador;
+    private JTable tabla;
+    //para guardar datos reales de la tabla
+    private DefaultTableModel modelo;
+    //componete para ordenar tabla y filtrar el buscador
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public PanelInventario() {
-
-        // El panel de Inventario se dividira en 3 Paneles usando border
+        //dividimos Panel Principal Inentario con border
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // En la parte Norte se aplicara un panel border para acomodar agregaremos el panel buscador
-
+        // Creamos el panel del buscador y colocamos al norte del principal
         panelBuscador = new PanelBuscador();
         add(panelBuscador, BorderLayout.NORTH);
 
-        // En el panel del centro se insertara la tabla con scroll
-        //creamos un arreglo para los titulos de las columnas de la tabla
+        // Creamos las columnoas con sus titulos para inicializarlo en los parametros de modelo
         String[] columnas = {"ID", "Nombre", "Stock", "Precio"};
-
-        //inicializamos modelo con el arreglo para conectar los datos de las tabla
         modelo = new DefaultTableModel(columnas, 0);
 
-        // creamos los datos brutos
-        modelo.addRow(new Object[]{"2323", "coca", "5", "20"});
-        modelo.addRow(new Object[]{"2224", "sabritas", "8", "23"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        modelo.addRow(new Object[]{"8767", "Atun", "34", "14"});
-        modelo.addRow(new Object[]{"8767", "marias galletas", "90", "19"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        modelo.addRow(new Object[]{"8767", "emperador galletas", "2", "26"});
-        //inicializamos la tabla para agregarle los datos
+        //inicializamos la tabla y modificámos acceso para que no se pueda modificar en la vista
         tabla = new JTable(modelo);
         tabla.setRowHeight(25);
         tabla.setDefaultEditor(Object.class, null);
         tabla.getTableHeader().setReorderingAllowed(false);
 
+        // Inicializamos el sorter con el modelo para poder ordenar y filtrar la tabla
         sorter = new TableRowSorter<>(modelo);
         tabla.setRowSorter(sorter);
 
-        // conectar buscador con filtro creando lamda
-        panelBuscador.getBtnBuscar().addActionListener(e -> {
-            String texto = panelBuscador.getBuscador().getText();
-
-            // si el filtro esta vacio muestrat todo
-            if (texto.trim().isEmpty()) {
-                sorter.setRowFilter(null);
-            }
-            // busca considencias sin importar si es maysucula o minuscula
-            else {
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
-            }
-        });
-        // Creamos el scrool para la tabla
+        // Creamos scroll para la tabla
         JScrollPane scroll = new JScrollPane(tabla);
 
-        // Ordenamos el panel centro
-        JPanel panelTabla = new JPanel(new BorderLayout());
-        panelTabla.setBorder(new EmptyBorder(20, 50, 20, 50));
-        panelTabla.add(scroll, BorderLayout.CENTER);
+        //Creamos el panel de la tabla y la centramos en panel tabla y panel principal
+        JPanel tabla = new JPanel(new BorderLayout());
+        tabla.setBorder(new EmptyBorder(20, 50, 20, 50));
+        tabla.add(scroll, BorderLayout.CENTER);
+        add(tabla, BorderLayout.CENTER);
 
-        add(panelTabla, BorderLayout.CENTER);
+        // Creamos el panel botones y utilizamos grind para organizarlos en columnas
+        JPanel BotonesInf = new JPanel(new GridLayout(1, 4, 20, 10));
+        BotonesInf.setBorder(new EmptyBorder(30, 50, 30, 50));
+        BotonesInf.setBackground(Color.WHITE);
 
-        // En el panel Sur organizaremos los paneles usando un gring layout
-        JPanel panelBotones = new JPanel(new GridLayout(1, 4, 20, 10));
-        panelBotones.setBorder(new EmptyBorder(30, 50, 30, 50));
-        panelBotones.setBackground(Color.WHITE);
-
-        agregarNuevo = new JButton("<html><center>Agregar<br>Nuevo</center></html>");
+        agregarNuevo = new JButton("Agregar");
         modificar = new JButton("Modificar");
         imprimir = new JButton("Imprimir");
         eliminar = new JButton("Eliminar");
 
-        //Agregamos los botones y les aplicamos estética
-        panelBotones.add(eliminar);
-        panelBotones.add(agregarNuevo);
-        panelBotones.add(modificar);
-        panelBotones.add(imprimir);
+        //usamos la clase estetica para los botones
+        EsteticaBoton.estilizarBoton(agregarNuevo);
+        EsteticaBoton.estilizarBoton(modificar);
+        EsteticaBoton.estilizarBoton(imprimir);
+        EsteticaBoton.estilizarBoton(eliminar);
 
-        estilizarBoton(modificar);
-        estilizarBoton(agregarNuevo);
-        estilizarBoton(imprimir);
-        estilizarBoton(eliminar);
+        EsteticaBoton.resaltadoBotones(agregarNuevo);
+        EsteticaBoton.resaltadoBotones(modificar);
+        EsteticaBoton.resaltadoBotones(imprimir);
+        EsteticaBoton.resaltadoBotones(eliminar);
 
-        add(panelBotones, BorderLayout.SOUTH);
+        BotonesInf.add(eliminar);
+        BotonesInf.add(agregarNuevo);
+        BotonesInf.add(modificar);
+        BotonesInf.add(imprimir);
+        //Colocamos el panel botones inferiores en el sur
+        add(BotonesInf, BorderLayout.SOUTH);
+        agregarDatosIniciales();
+    }
+    // Creamos las clases de nuestra interfaz Inventario, comenzando por los escuchas de cada boton
 
-        resaltadoBotones(agregarNuevo);
-        resaltadoBotones(modificar);
-        resaltadoBotones(imprimir);
-        resaltadoBotones(eliminar);
+    public void addModificarListener(ActionListener listener) {
+        modificar.addActionListener(listener);
+    }
+    public void addAgregarListener(ActionListener listener) {
+        agregarNuevo.addActionListener(listener);
+    }
+    public void addImprimirListener(ActionListener listener) {
+        imprimir.addActionListener(listener);
+    }
+    public void addEliminarListener(ActionListener listener) {
+        eliminar.addActionListener(listener);
+    }
+    public void addBuscarListener(ActionListener listener) {
+        panelBuscador.getBtnBuscar().addActionListener(listener);
     }
 
-    /**
-     * Este metodo modifica la estética de los botones de la parte sur
-     * @param b Un Jbutton para modificar su estética
-     */
-    private void estilizarBoton(JButton b) {
-
-        b.setUI(new javax.swing.plaf.basic.BasicButtonUI());
-        b.setFont(new Font("Open Sans", Font.BOLD, 18));
-        b.setBackground(new Color(255, 0, 0));
-        b.setForeground(Color.WHITE);
-        b.setContentAreaFilled(false);
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
-        b.setFocusable(false);
+    // Metodo para agregar una fila al modelo con una arreglo de objetos
+    public void agregarFila(Object[] fila) {
+        modelo.addRow(fila);
     }
-    public void resaltadoBotones(JButton b){
-        b.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                b.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                b.setBackground(new Color(255, 0, 0));// Color original al salir
-            }
-        });
+    // Elimina la fila seleeciona atraves de su posicion
+    public void eliminarFila(int fila) {
+        modelo.removeRow(fila);
     }
+
+    // Ordena la filas correctamente en modelo atraves del sorter
+    public void actualizarFila(int filaVista, Object[] datos) {
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+        for (int i = 0; i < datos.length; i++) {
+            modelo.setValueAt(datos[i], filaModelo, i);
+        }
+    }
+    // getter que retorna la pocision de la fila seleccionada
+    public int getFilaSeleccionada() {
+        int fila = tabla.getSelectedRow();
+        if (fila == -1) {
+            return -1;
+        } else {
+            return fila;
+        }
+    }
+    //Retorna el prducto seleccionado verificando si se seleciono correctamente
+    // despues retorna la fila seleecionada con todos sus datos
+    public Object[] getProductoSeleccionado() {
+        int filaVista = tabla.getSelectedRow();
+        if (filaVista == -1) return null;
+
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+        return new Object[]{
+                modelo.getValueAt(filaModelo, 0), // ID
+                modelo.getValueAt(filaModelo, 1), // Nombre
+                modelo.getValueAt(filaModelo, 2), // Stock
+                modelo.getValueAt(filaModelo, 3)  // Precio
+        };
+    }
+
+    // Metodo que abre una ventana y agrega el mensaje a mostrar
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    //Metodo para imprimir el invnetario completo
     public void imprimirInventarioCompleto() {
         try {
-
             boolean done = tabla.print(
                     JTable.PrintMode.FIT_WIDTH,
                     new java.text.MessageFormat("INVENTARIO COMPLETO"),
                     new java.text.MessageFormat("Página {0}")
             );
-
             if (done) {
                 JOptionPane.showMessageDialog(this, "Impresión enviada correctamente");
-            } else {
-                JOptionPane.showMessageDialog(this, "Impresión cancelada");
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al imprimir inventario");
-            e.printStackTrace();
         }
     }
-    public Object[] getProductoSeleccionado() {
+    // Este metodo filtra el texto para buscarlo en la tabla evitando minusculas y mayusculas atraves del sorter
+    public void filtrarTabla(String texto) {
 
-        int fila = tabla.getSelectedRow();
-
-        if (fila == -1) return null;
-
-        int modelRow = tabla.convertRowIndexToModel(fila);
-
-        return new Object[]{
-                modelo.getValueAt(modelRow, 0), // ID
-                modelo.getValueAt(modelRow, 1), // Nombre
-                modelo.getValueAt(modelRow, 2), // Stock
-                modelo.getValueAt(modelRow, 3)  // Precio
-        };
-    }
-    public void actualizarFilaSeleccionada(Object[] fila) {
-
-        int filaVista = tabla.getSelectedRow();
-
-        // si no hay fila seleccionada
-        if (filaVista == -1) {
-            return;
-        }
-
-        // convertir a índice del modelo (por el sorter)
-        int filaModelo = tabla.convertRowIndexToModel(filaVista);
-
-        // actualizar cada columna
-        for (int i = 0; i < fila.length; i++) {
-            modelo.setValueAt(fila[i], filaModelo, i);
+        if (texto == null || texto.trim().isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + texto)
+            );
         }
     }
-    public void eliminarFila(int fila) {
-        modelo.removeRow(fila);
-    }
-    public int getFilaSeleccionada() {
-        int fila = tabla.getSelectedRow();
-        if (fila == -1) return -1;
-        return tabla.convertRowIndexToModel(fila);
+    // Getter para obtener el texto introducido en el buscador
+    public String getTextoBuscador() {
+        return panelBuscador.getBuscador().getText();
     }
 
-    public void addModificarListener(ActionListener listener){
-        modificar.addActionListener(listener);
+    // Busca Producto por nombre para mandarlo a la tabla de punto de venta
+    public Object[] buscarProductoPorNombre(String nombre) {
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+
+            // comprobamos que el porducto encontrado exista en el inventario
+           //if (modelo.getValueAt(i, 1).toString().equalsIgnoreCase(nombre)) {
+            if (modelo.getValueAt(i, 1).toString().toLowerCase().contains(nombre.toLowerCase())){
+                // si existe retornamos el objetos con todos sus datos
+                return new Object[]{
+                        modelo.getValueAt(i, 0), // ID
+                        modelo.getValueAt(i, 1), // Nombre
+                        modelo.getValueAt(i, 2), // Stock
+                        modelo.getValueAt(i, 3)  // Precio
+                };
+            }
+        }
+        return null;
     }
-    public void addAgregarListener(ActionListener listener){
-        agregarNuevo.addActionListener(listener);
+
+    //Modificamos del stock del producto comprado
+    public void actualizarStock(String id, int nuevoStock) {
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            //buscamor por id el producto
+            if (modelo.getValueAt(i, 0).toString().equals(id)) {
+                // modificamos el stokc en el invnetario
+                modelo.setValueAt(nuevoStock, i, 2);
+                return;
+            }
+        }
     }
-    public void addImprimirListener(ActionListener listener){
-        imprimir.addActionListener(listener);
-    }
-    public void addEliminarListener(ActionListener listener){
-        eliminar.addActionListener(listener);
-    }
-    public void agregarFila(Object[] fila) {
-        modelo.addRow(fila);
+
+    /**
+     * Metodo para agregar datos brutos
+     */
+    private void agregarDatosIniciales() {
+
+        modelo.addRow(new Object[]{"1", "Arroz 1kg", 25, 28.50});
+        modelo.addRow(new Object[]{"2", "Frijol 1kg", 18, 32.00});
+        modelo.addRow(new Object[]{"3", "Azúcar 1kg", 20, 30.00});
+        modelo.addRow(new Object[]{"4", "Aceite vegetal 1L", 15, 48.90});
+        modelo.addRow(new Object[]{"5", "Leche 1L", 30, 24.50});
+        modelo.addRow(new Object[]{"6", "Huevo (cartón 12)", 12, 42.00});
+        modelo.addRow(new Object[]{"7", "Pan de caja", 22, 38.00});
+        modelo.addRow(new Object[]{"8", "Café soluble 100g", 10, 55.00});
+        modelo.addRow(new Object[]{"9", "Atún en lata", 40, 18.50});
+        modelo.addRow(new Object[]{"10", "Pasta spaghetti 500g", 28, 16.00});
+        modelo.addRow(new Object[]{"11", "Sal refinada 1kg", 35, 12.00});
+        modelo.addRow(new Object[]{"12", "Galletas María", 40, 22.50});
+        modelo.addRow(new Object[]{"13", "Salsa de tomate", 25, 18.00});
+        modelo.addRow(new Object[]{"14", "Jabón en polvo 1kg", 14, 45.00});
+        modelo.addRow(new Object[]{"15", "Agua embotellada 1L", 50, 10.00});
     }
 }
+

@@ -1,132 +1,149 @@
 package Controlador;
 
+import Interfaces.InterfazInventario;
 import Interfaces.Navegador;
-import Vista.PanelInventario;
 import Vista.DialogProducto;
-import Vista.PanelProductoFormulario;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+/**
+ * Controlador de las acciones de los botones inventario
+ *  * @author Erick
+ *  * @version 1.0
+ */
 
 public class ControladorInventario {
-
-    private PanelInventario vista;
+    //creamos atributos usando la interfaz de inventario y navegador
+    private InterfazInventario vista;
     private Navegador ventana;
 
-    public ControladorInventario(Navegador ventana, PanelInventario vista) {
+    public ControladorInventario(Navegador ventana, InterfazInventario vista) {
         this.ventana = ventana;
         this.vista = vista;
 
+        // Agregregar
         vista.addAgregarListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DialogProducto dialog = new DialogProducto((JFrame) ventana, "Agregar Producto");
+                // creamos una ventana emergente atraves de la clase dialogPrducto
+                DialogProducto agregarProducto = new DialogProducto((JFrame) ventana, "Agregar Producto");
 
-                dialog.getPanel().getGuardar().addActionListener(ev -> {
+                //Creamos una landa para el boton guardar que existe en la clase
+                agregarProducto.getPanel().getGuardar().addActionListener(ev -> {
 
-                    String id = dialog.getPanel().getId();
-                    String nombre = dialog.getPanel().getNombre();
-                    String stock = dialog.getPanel().getStock();
-                    String precio = dialog.getPanel().getPrecio();
+                    //Creamos variables auxiliares para guardar los datos de los campos de la ventana
+                    String id = agregarProducto.getPanel().getId();
+                    String nombre = agregarProducto.getPanel().getNombre();
+                    String stock = agregarProducto.getPanel().getStock();
+                    String precio = agregarProducto.getPanel().getPrecio();
 
+                    //verificamos que no se quede ningun campo vacio si alguno esta vacio
+                    //llamamos al metodo mostrar mensaje para una ventana emergente
                     if (id.isEmpty() || nombre.isEmpty() || stock.isEmpty() || precio.isEmpty()) {
-                        JOptionPane.showMessageDialog(dialog, "Todos los campos son obligatorios");
+                        vista.mostrarMensaje("Todos los campos son obligatorios");
                         return;
                     }
 
-                    vista.agregarFila(new Object[]{id, nombre, stock, precio});
-
-                    dialog.dispose();
+                    //Pasamos los datos al metodo agregar fila para que se agregen
+                    vista.agregarFila(new Object[]{id, nombre, Integer.parseInt(stock), Double.parseDouble(precio)});
+                    agregarProducto.dispose();
                 });
-
-                dialog.getPanel().getCancelar().addActionListener(ev -> dialog.dispose());
-
-                dialog.setVisible(true);
+                //Evento para el boton cancelar solo cierra la ventana
+                agregarProducto.getPanel().getCancelar().addActionListener(ev -> agregarProducto.dispose());
+                agregarProducto.setVisible(true);
             }
         });
 
+        // Modificar
+        vista.addModificarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // Creamos un objeto y pasamos los datos del objeto seleecionado
+                Object[] data = vista.getProductoSeleccionado();
+
+                // Verificamos que se muestre un producto
+                if (data == null) {
+                    vista.mostrarMensaje("Seleccione un producto");
+                    return;
+                }
+
+                //creamos una ventana emergente atraves de la clase dialogPrducto
+                DialogProducto modificarProducto = new DialogProducto((JFrame) ventana, "Modificar Producto");
+
+                //Cargamos los datos al formulario
+                modificarProducto.getPanel().cargarDatos(
+                        data[0].toString(),
+                        data[1].toString(),
+                        data[2].toString(),
+                        data[3].toString()
+                );
+
+                //Creamos landa para el boton guardar parecido al boton agregar
+                modificarProducto.getPanel().getGuardar().addActionListener(ev -> {
+
+                    // pasamos la posicion del producto seleccionado
+                    int fila = vista.getFilaSeleccionada();
+
+                    //verificamos que si haya un producto seleccionado
+                    if (fila == -1) {
+                        vista.mostrarMensaje("Seleccione un producto");
+                        return;
+                    }
+
+                    //Variables auxiliares para modificoar
+                    String id = modificarProducto.getPanel().getId();
+                    String nombre = modificarProducto.getPanel().getNombre();
+                    String stock = modificarProducto.getPanel().getStock();
+                    String precio = modificarProducto.getPanel().getPrecio();
+
+                    //Actualizamos la fila seleccionada
+                    vista.actualizarFila(fila, new Object[]{
+                            id,
+                            nombre,
+                            Integer.parseInt(stock),
+                            Double.parseDouble(precio)
+                    });
+                    modificarProducto.dispose();
+                });
+                //evento para boton cancelar solo cierra la ventana
+                modificarProducto.getPanel().getCancelar().addActionListener(ev -> modificarProducto.dispose());
+                modificarProducto.setVisible(true);
+            }
+        });
+
+        // Eliminar
+        vista.addEliminarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // pasamos la posicion del producto sleecionado
+                int fila = vista.getFilaSeleccionada();
+                //Verificamos que se selccione alguno
+                if (fila == -1) {
+                    vista.mostrarMensaje("Seleccione un producto");
+                    return;
+                }
+                //Eliminamos Producto con el metodo de la interface
+                vista.eliminarFila(fila);
+            }
+        });
+
+        // Imprimir, atraves del metodo creado en la interface
         vista.addImprimirListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 vista.imprimirInventarioCompleto();
             }
         });
-
-        vista.addModificarListener(new ActionListener() {
+        // Buscar
+        vista.addBuscarListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Object[] data = vista.getProductoSeleccionado();
-
-                if (data == null) {
-                    JOptionPane.showMessageDialog(null, "Seleccione un producto");
-                    return;
-                }
-
-                DialogProducto dialog = new DialogProducto((JFrame) ventana, "Modificar Producto");
-                PanelProductoFormulario form = dialog.getPanel();
-
-                // cargar datos (activa modo edición)
-                form.cargarDatos(
-                        data[1].toString(),
-                        data[0].toString(),
-                        data[3].toString(),
-                        data[2].toString()
-                );
-
-                // limpiar listeners
-                for (ActionListener al : form.getGuardar().getActionListeners()) {
-                    form.getGuardar().removeActionListener(al);
-                }
-
-                form.getGuardar().addActionListener(ev -> {
-
-                    String nombre = form.getNombre();
-                    String id = form.getId();
-                    String stock = form.getStock();
-                    String precio = form.getPrecio();
-
-                    if (nombre.isEmpty() || id.isEmpty() || stock.isEmpty() || precio.isEmpty()) {
-                        JOptionPane.showMessageDialog(dialog, "Todos los campos son obligatorios");
-                        return;
-                    }
-
-                    // actualizar fila
-                    vista.actualizarFilaSeleccionada(new Object[]{id, nombre, stock, precio});
-
-                    dialog.dispose();
-                });
-
-                form.getCancelar().addActionListener(ev -> dialog.dispose());
-
-                dialog.setVisible(true);
-            }
-        });
-
-        vista.addEliminarListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                int fila = vista.getFilaSeleccionada();
-
-                if (fila == -1) {
-                    JOptionPane.showMessageDialog(null, "Seleccione un producto para eliminar");
-                    return;
-                }
-
-                //  Obtener datos para mostrar (opcional pero recomendado)
-                Object[] data = vista.getProductoSeleccionado();
-
-                int confirm = JOptionPane.showConfirmDialog(
-                        null,
-                        "¿Eliminar producto: " + data[1] + "?",
-                        "Confirmar eliminación",
-                        JOptionPane.YES_NO_OPTION
-                );
-
-                if (confirm == JOptionPane.YES_OPTION) {
-                    vista.eliminarFila(fila); // AQUÍ ESTÁ LA CLAVE
-                }
+                // leemos el texto del buscador
+                String texto = vista.getTextoBuscador();
+                //lo filtamos en la tabla
+                vista.filtrarTabla(texto);
             }
         });
     }

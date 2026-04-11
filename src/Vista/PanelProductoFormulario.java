@@ -4,7 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+/**
+ * Panel de la ventana emergente para llenar formularios
+ *  * @author Rogelio
+ *  * @version 1.0
+ */
 public class PanelProductoFormulario extends JPanel {
 
     private JTextField nombre;
@@ -81,13 +85,13 @@ public class PanelProductoFormulario extends JPanel {
 
         south.add(guardar);
         south.add(cancelar);
-        estilizarBoton(guardar);
-        estilizarBoton(cancelar);
+        EsteticaBoton.estilizarBoton(guardar);
+        EsteticaBoton.estilizarBoton(cancelar);
 
         add(south, BorderLayout.SOUTH);
 
-        resaltadoBotones(guardar);
-        resaltadoBotones(cancelar);
+        EsteticaBoton.resaltadoBotones(guardar);
+        EsteticaBoton.resaltadoBotones(cancelar);
     }
 
     // ================= IMAGEN =================
@@ -109,12 +113,12 @@ public class PanelProductoFormulario extends JPanel {
     }
 
     // ================= MODO EDICIÓN =================
-    public void cargarDatos(String nombre, String id, String precio, String stock) {
+    public void cargarDatos(String id, String nombre, String stock, String precio) {
 
-        this.nombre.setText(nombre);
         this.id.setText(id);
-        this.precio.setText(precio);
+        this.nombre.setText(nombre);
         this.stock.setText(stock);
+        this.precio.setText(precio);
 
         setModoEdicion(true);
     }
@@ -135,32 +139,6 @@ public class PanelProductoFormulario extends JPanel {
         c.gridx = x;
         c.gridy = y;
         return c;
-    }
-    //Estetica
-    private void estilizarBoton(JButton b) {
-
-        b.setUI(new javax.swing.plaf.basic.BasicButtonUI());
-        b.setFont(new Font("Open Sans", Font.BOLD, 18));
-        b.setBackground(new Color(255, 0, 0));
-        b.setForeground(Color.WHITE);
-        b.setContentAreaFilled(false);
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
-        b.setFocusable(false);
-    }
-    public void resaltadoBotones(JButton b){
-        b.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                b.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                b.setBackground(new Color(255, 0, 0));// Color original al salir
-            }
-        });
     }
 
     // ================= GETTERS =================

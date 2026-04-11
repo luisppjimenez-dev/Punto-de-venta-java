@@ -10,14 +10,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Crea los botones del menu principal que esta fijo en la parte superior de las ventanas
- * principales
+ * Crea los botones del menu principal que esta fijo en la parte superior de las ventana principal
  *  * @author Luis
  *  * @version 1.0
  */
 
 public class PanelBotones extends JPanel implements InterfazBtnPrincipales {
 
+    // Creamos botones pricipales
     private JButton puntoVenta;
     private JButton inventario;
     private JButton historial;
@@ -28,19 +28,22 @@ public class PanelBotones extends JPanel implements InterfazBtnPrincipales {
 
     public PanelBotones() {
 
+        //Dividimos el panel con border
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        //Panel boton logo
+        //Creamos un nuevo panel para el boton logo
         JPanel panelBotonLogo = new JPanel(new BorderLayout());
         panelBotonLogo.setBackground(Color.WHITE);
+
+        //Cargamos la imagen logo
         logo = new ImageIcon(getClass().getResource("/imagenes/donroy.png"));
         logoG = new ImageIcon(getClass().getResource("/imagenes/donroyG.png"));
         botonLogo = new JLabel(logo);
         panelBotonLogo.add(botonLogo, BorderLayout.WEST);
 
 
-        // Panel Botones pricipales
+        // Panel Botones pricipales los ordenamos con grid layout en columnas y modificamos dimensiones de los botones
         JPanel panelBotones = new JPanel(new GridLayout(1, 3, 30, 30));
         panelBotones.setBorder(new EmptyBorder(30, 50, 30, 50));
         panelBotones.setBackground(Color.WHITE);
@@ -49,50 +52,37 @@ public class PanelBotones extends JPanel implements InterfazBtnPrincipales {
         inventario = new JButton("Inventario");
         historial = new JButton("<html><center>Historial<br>de ventas</center></html>");
 
-        estilizarBoton(puntoVenta);
-        estilizarBoton(inventario);
-        estilizarBoton(historial);
+        // Estetica de botones
+        EsteticaBoton.estilizarBoton(puntoVenta);
+        EsteticaBoton.estilizarBoton(inventario);
+        EsteticaBoton.estilizarBoton(historial);
+
+        EsteticaBoton.resaltadoBotones(puntoVenta);
+        EsteticaBoton.resaltadoBotones(inventario);
+        EsteticaBoton.resaltadoBotones(historial);
+        efectoLogo();
 
         panelBotones.add(puntoVenta);
         panelBotones.add(inventario);
         panelBotones.add(historial);
 
-        // Ordenar boton de logo
+        // Ordenar boton de logo al norte y  despues el panel botones en el centro
         add(panelBotonLogo, BorderLayout.NORTH);
         panelBotonLogo.add(panelBotones, BorderLayout.CENTER);
 
-        resaltadoBotones(puntoVenta);
-        resaltadoBotones(inventario);
-        resaltadoBotones(historial);
-        efectoLogo();
+
     }
 
-    /**
-     * Este metodo modifica la estética de los botones principales
-     * @param b Un Jbutton para modificar su estética
-     */
-    private void estilizarBoton(JButton b) {
-
-        b.setUI(new javax.swing.plaf.basic.BasicButtonUI());
-        b.setFont(new Font("Open Sans", Font.BOLD, 18));
-        b.setBackground(new Color(255, 0, 0));
-        b.setForeground(Color.WHITE);
-        b.setContentAreaFilled(false);
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setFocusPainted(false);
-        b.setFocusable(false);
-    }
-
-    public void addPuntoVentaListener(ActionListener listener){
+    // Escuchas de los botones
+    public void addPuntoVentaListener(ActionListener listener) {
         puntoVenta.addActionListener(listener);
     }
 
-    public void addInventarioListener(ActionListener listener){
+    public void addInventarioListener(ActionListener listener) {
         inventario.addActionListener(listener);
     }
 
-    public void addHistorialListener(ActionListener listener){
+    public void addHistorialListener(ActionListener listener) {
         historial.addActionListener(listener);
     }
 
@@ -100,19 +90,9 @@ public class PanelBotones extends JPanel implements InterfazBtnPrincipales {
         botonLogo.addMouseListener(listener);
     }
 
-    public void resaltadoBotones(JButton b){
-        b.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                b.setBackground(new Color(204, 114, 114));// Color más claro al pasar el ratón
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                b.setBackground(new Color(255, 0, 0));// Color original al salir
-            }
-        });
-    }
+    /**
+     * Metodo para resaltar la imagen del logo cuando el cursor pase por el
+     */
     private void efectoLogo() {
         botonLogo.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
